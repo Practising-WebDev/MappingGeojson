@@ -34,7 +34,7 @@
     <script>
       const mymapview = L.map("mymap").setView([26.514727, 80.241906], 4.3);
 
-// tiles
+      // tiles
       var tiles = L.tileLayer(
         "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
         {
@@ -44,7 +44,7 @@
       );
       tiles.addTo(mymapview);
 
-// marker
+      // marker
       var markericon = L.icon({
         iconUrl: "red-icon.png",
         iconSize: [30, 40],
@@ -59,52 +59,88 @@
 
       // trying to change marker location on clicking json layer and popup the latitude and longitude of clicked location ,but not successful.
 
+      //       function onEachFeature(feature, layer) {
+      //     layer.on('click', function(e) {
+      //         lat = e.latlng.lat;
+      //         lng = e.latlng.lng;
+      //         mymap.on('click', function (e) {
+      //             if (marker) {
+      //                 mymap.removeLayer(marker);
+      //             }
+      //             marker = new L.Marker([lat,lng], {icon: markericon}).addTo(mymapview);
+      //         });
+      //     });
+      // }
 
-//       function onEachFeature(feature, layer) {
-//     layer.on('click', function(e) {
-//         lat = e.latlng.lat;
-//         lng = e.latlng.lng;    
-//         mymap.on('click', function (e) {
-//             if (marker) {
-//                 mymap.removeLayer(marker);
-//             }
-//             marker = new L.Marker([lat,lng], {icon: markericon}).addTo(mymapview);
-//         });
-//     });
-// }
+      // json
+      // function(e){
+      //   var lati = (e.latlng.lat);
+      //     var long = (e.latlng.lng);
+      //     return lati,long;
+      // }
 
-// json
-// function(e){
-//   var lati = (e.latlng.lat);
-//     var long = (e.latlng.lng);
-//     return lati,long;
-// }
+      // L.geoJSON(indiajson, {
+      //   onEachFeature: function (feature, layer) {
+      //     layer.bindPopup(
+      //       feature.properties.NAME_1 + `,` + feature.properties.ENGTYPE_1
+      //     );
+      //   },
+      //   style: function(feature){
+      //     if (feature.properties.ENGTYPE_1== "State")
+      //     return{
+
+      //       fillColor: "#EE7056",
+      //       color: "grey",
+      //       weight: 1,
+      //     }
+      // else
+      // return{
+
+      //   fillColor: "#C3624D ",
+      //   color: "grey",
+      //   weight: 1,
+      //   fillOpacity: 0.6,
+      // }
+
+      //   },
+      // }).addTo(mymapview);
+
+      var clickedLatLng = { lat: null, lng: null };
+
+      function createPopupContent(feature) {
+        return function () {
+          return feature.properties.NAME_1 + ", " + feature.properties.ENGTYPE_1 + ", " + clickedLatLng.lat + ", " + clickedLatLng.lng;
+        };
+      }
+
+     function onLineClick(e) {
+         clickedLatLng = e.latlng;
+      }
+
+      function onEachFeature(feature, layer) {
+        layer.on("click", onLineClick);
+        layer.bindPopup(createPopupContent(feature));
+      }
 
       L.geoJSON(indiajson, {
-        onEachFeature: function (feature, layer) {
-          layer.bindPopup(
-            feature.properties.NAME_1 + `,` + feature.properties.ENGTYPE_1
-          );
+        style: function (feature) {
+          if (feature.properties.ENGTYPE_1 == "State")
+            return {
+              fillColor: "#EE7056",
+              color: "grey",
+              weight: 1,
+            };
+          else
+            return {
+              fillColor: "#C3624D ",
+              color: "grey",
+              weight: 1,
+              fillOpacity: 0.6,
+            };
         },
-        style: function(feature){ 
-          if (feature.properties.ENGTYPE_1== "State")
-          return{
-
-            fillColor: "#EE7056",
-            color: "grey",
-            weight: 1,
-          }
-      else
-      return{
-
-        fillColor: "#C3624D ",
-        color: "grey",
-        weight: 1,
-        fillOpacity: 0.6,
-      }
-         
-        },
+        onEachFeature: onEachFeature,
       }).addTo(mymapview);
+
     </script>
   </body>
 </html>
