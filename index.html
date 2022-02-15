@@ -59,7 +59,7 @@
 
       // trying to change marker location on clicking json layer and popup the latitude and longitude of clicked location ,but not successful.
 
-      
+
 //       function onEachFeature(feature, layer) {
 //     layer.on('click', function(e) {
 //         lat = e.latlng.lat;
@@ -86,10 +86,23 @@
             feature.properties.NAME_1 + `,` + feature.properties.ENGTYPE_1
           );
         },
-        style: {
-          fillColor: "orange",
-          color: "grey",
-          weight: 1,
+        style: function(feature){ 
+          if (feature.properties.ENGTYPE_1== "State")
+          return{
+
+            fillColor: "#EE7056",
+            color: "grey",
+            weight: 1,
+          }
+      else
+      return{
+
+        fillColor: "#C3624D ",
+        color: "grey",
+        weight: 1,
+        fillOpacity: 0.6,
+      }
+         
         },
       }).addTo(mymapview);
     </script>
