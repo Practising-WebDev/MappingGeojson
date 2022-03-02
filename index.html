@@ -108,9 +108,10 @@
       var clickedLatLng = { lat: null, lng: null };
 
       function createPopupContent(feature) {
-        return function () {
-          return feature.properties.NAME_1 + ", " + feature.properties.ENGTYPE_1 + ", " + clickedLatLng.lat + ", " + clickedLatLng.lng;
-        };
+       return function(){
+         return feature.properties.NAME_1 + ", " + feature.properties.ENGTYPE_1 + ", " + clickedLatLng.lat + ", " + clickedLatLng.lng;
+        }
+        
       }
 
      function onLineClick(e) {
